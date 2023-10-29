@@ -850,6 +850,8 @@ export default defineComponent({
   },
 
   async created() {
+    // console.log('Created!');
+
     this.bannerImage = this.defaultBanner;
     this.logoImage = this.defaultLogo;
 
@@ -857,7 +859,8 @@ export default defineComponent({
 
     const params = new URLSearchParams(window.location.search);
 
-    await this.addMarket(params.get("naddr"));
+    await this.addMarket(this.defaultMarketNaddr, false);
+    // await this.addMarket(params.get("naddr"));
     await this._handleQueryParams(params);
 
     this.isLoading = false;
@@ -1352,7 +1355,7 @@ export default defineComponent({
         this.setActivePage("market-config");
       }
     },
-    async addMarket(naddr) {
+    async addMarket(naddr, ask = true) {
       if (!naddr) return;
 
       try {
@@ -1379,16 +1382,21 @@ export default defineComponent({
 
         if (isJson(event.content)) {
           market.opts = JSON.parse(event.content);
-          this.$q
-            .dialog(
-              confirm(
-                `Do you want to use the look and feel of the '${market.opts.name}' market?`
+          const setConfig = async() => {
+            this.config = { ...this.config, opts: market.opts };
+            this._applyUiConfigs(market?.opts);
+          };
+          if (ask) {
+            this.$q
+              .dialog(
+                confirm(
+                  `Do you want to use the look and feel of the '${market.opts.name}' market?`
+                )
               )
-            )
-            .onOk(async () => {
-              this.config = { ...this.config, opts: market.opts };
-              this._applyUiConfigs(market?.opts);
-            });
+              .onOk(setConfig);
+          } else {
+            await setConfig();
+          }
         }
 
         this.markets = this.markets.filter(
