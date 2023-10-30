@@ -1542,7 +1542,7 @@ export default defineComponent({
 
       console.log("### marketData", marketData);
       const identifier = marketData.d ?? crypto.randomUUID();
-      const event = {
+      let event = {
         ...(await NostrTools.getBlankEvent()),
         kind: 30019,
         content: JSON.stringify(marketData.opts),
@@ -1730,7 +1730,7 @@ export default defineComponent({
         return;
       }
       try {
-        const event = {
+        let event = {
           ...(await NostrTools.getBlankEvent()),
           kind: 4,
           created_at: Math.floor(Date.now() / 1000),
