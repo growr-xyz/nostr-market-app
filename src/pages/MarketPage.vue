@@ -1552,8 +1552,8 @@ export default defineComponent({
       };
       event.id = NostrTools.getEventHash(event);
       try {
-        if (this.account.useExtension) event.sig = await await window.nostr.signEvent(event);
-        else event.sig = await NostrTools.signEvent(event, this.account.privkey);
+        if (this.account.useExtension) event = await window.nostr.signEvent(event);
+        else event.sig = await NostrTools.getSignature(event, this.account.privkey);
 
         const relayCount = await this._publishEventToRelays(
           event,
@@ -1745,8 +1745,8 @@ export default defineComponent({
         );
 
         event.id = NostrTools.getEventHash(event);
-        if (this.account.useExtension) event.sig = await await window.nostr.signEvent(event);
-        else event.sig = await NostrTools.signEvent(event, this.account.privkey);
+        if (this.account.useExtension) event = await window.nostr.signEvent(event);
+        else event.sig = await NostrTools.getSignature(event, this.account.privkey);
 
         await this._sendDmEvent(event);
         event.content = dm.message;
@@ -1795,8 +1795,8 @@ export default defineComponent({
         );
 
         event.id = NostrTools.getEventHash(event);
-        if (this.account.useExtension) event.sig = await await window.nostr.signEvent(event);
-        else event.sig = await NostrTools.signEvent(event, this.account.privkey);
+        if (this.account.useExtension) event = await window.nostr.signEvent(event);
+        else event.sig = await NostrTools.getSignature(event, this.account.privkey);
 
         await this._sendOrderEvent(event);
         this._persistOrderUpdate(
