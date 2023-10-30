@@ -2,6 +2,10 @@
 .thumbs.db
 node_modules
 
+market
+market/
+market/*
+
 # Quasar core related directories
 .quasar
 /dist
